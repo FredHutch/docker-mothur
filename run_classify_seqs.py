@@ -5,6 +5,7 @@ import os
 import logging
 import argparse
 from exec_helpers import run_cmds
+from exec_helpers import fastq_to_fasta
 from exec_helpers import return_results
 from s3_helpers import get_file
 from s3_helpers import s3_path_exists
@@ -43,6 +44,25 @@ def classify_seqs(input_str,
 
     # Get the reads
     read_fp = get_reads_from_url(input_str, temp_folder)
+    # If the reads are gzipped, unzip them
+    if read_fp.endswith(".gz"):
+        run_cmds(["gunzip", "-f", read_fp])
+        read_fp = read_fp.replace(".gz", "")
+
+    # If the reads are in FASTQ format, convert to FASTA
+    for ending in [".fq", ".fastq"]:
+        if read_fp.endswith(ending):
+            new_fp = read_fp.replace(ending, ".fasta")
+            fastq_to_fasta(read_fp, new_fp)
+            read_fp = new_fp
+
+    # If the reads have non-standard FASTA suffixes, correct them
+    for ending in [".fa", ".fna"]:
+        if read_fp.endswith(ending):
+            new_fp = read_fp.replace(ending, ".fasta")
+            os.rename(read_fp, new_fp)
+            read_fp = new_fp
+
     # Make sure that it ends with ".fasta"
     assert read_fp.endswith(".fasta")
 

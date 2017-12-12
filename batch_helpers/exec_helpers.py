@@ -56,3 +56,31 @@ def return_results(out, read_prefix, output_folder, temp_folder):
     else:
         # Copy to local folder
         run_cmds(['mv', temp_fp, output_folder])
+
+
+def fastq_to_fasta(fastq_in, fasta_out):
+    """Convert FASTQ to FASTA."""
+    n_headers = 0
+    n_seqs = 0
+    with open(fastq_in, "rt") as fi:
+        with open(fasta_out, "wt") as fo:
+            for ix, line in enumerate(fi):
+                if ix % 4 == 0:
+                    # Skip empty lines
+                    if len(line) <= 1:
+                        continue
+                    # Header line
+                    assert line[0] == '@', line
+                    line = "@{}".format(line[1:])
+                    fo.write(line)
+                    n_headers += 1
+                elif ix % 4 == 1:
+                    # Sequence line
+                    fo.write(line)
+                    n_seqs += 1
+                elif ix % 4 == 2:
+                    # Spacer line
+                    assert line[0] == "+"
+
+    assert n_headers == n_seqs
+    logging.info("Converted {} records to FASTA".format(n_headers))

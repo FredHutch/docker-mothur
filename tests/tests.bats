@@ -15,5 +15,11 @@
 @test "run_classify_seqs.py" {
   run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query.fasta
   
-  python /usr/local/tests/test_run_classify_seqs.py
+  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query.fasta.json.gz
+}
+
+@test "run_classify_seqs.py - fastq_to_fasta" {
+  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query2.fastq
+  
+  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query2.fastq.json.gz
 }

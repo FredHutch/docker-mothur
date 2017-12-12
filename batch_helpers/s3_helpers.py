@@ -5,6 +5,7 @@ import os
 import boto3
 import logging
 from exec_helpers import run_cmds
+from exec_helpers import fastq_to_fasta
 from sra_helpers import get_sra
 
 

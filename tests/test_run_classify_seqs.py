@@ -2,10 +2,11 @@
 """Test the run_classify_seqs.py command."""
 
 import os
+import sys
 import gzip
 import json
 
-fp = '/usr/local/tests/test_query.fasta.json.gz'
+fp = sys.argv[1]
 assert os.path.exists(fp)
 result = json.load(gzip.open(fp))
 
