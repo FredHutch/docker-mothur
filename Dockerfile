@@ -3,7 +3,7 @@ MAINTAINER sminot@fredhutch.org
 
 # Install prerequisites
 RUN apt update && \
-	apt install -y wget unzip python python-pip bats
+	apt install -y wget unzip python python-pip bats awscli curl
 
 ADD requirements.txt /usr/local/
 RUN pip install -r /usr/local/requirements.txt

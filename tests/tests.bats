@@ -12,6 +12,17 @@
 	[ "$output" == "$correct_output" ]
 }
 
+@test "AWS CLI v1.11.13" {
+  v="$(aws --version 2>&1)"
+  [[ "$v" =~ "1.11.13" ]]
+}
+
+
+@test "Curl v7.47.0" {
+  v="$(curl --version)"
+  [[ "$v" =~ "7.47.0" ]]
+}
+
 @test "run_classify_seqs.py" {
   run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query.fasta
   
