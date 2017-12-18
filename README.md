@@ -4,6 +4,8 @@ Docker image running MOTHUR
 
 ### Docker image
 
+[![Docker Repository on Quay](https://quay.io/repository/fhcrc-microbiome/mothur/status "Docker Repository on Quay")](https://quay.io/repository/fhcrc-microbiome/mothur)
+
 The primary product of this repository is a Docker image that runs mothur.
 The image also contains a run script that makes it easier to run mothur on
 files that are hosted on AWS S3. 
