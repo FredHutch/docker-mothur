@@ -32,6 +32,9 @@ def get_reads_from_url(input_str, temp_folder):
 
     filename = input_str.split('/')[-1]
     local_path = os.path.join(temp_folder, filename)
+    # Make sure the temp folder ends with '/'
+    if not temp_folder.endswith("/"):
+        temp_folder = "{}/".format(temp_folder)
 
     logging.info("Filename: " + filename)
     logging.info("Local path: " + local_path)
