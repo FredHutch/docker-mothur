@@ -25,13 +25,17 @@ def s3_path_exists(s3_url):
 def get_reads_from_url(input_str, temp_folder):
     """Get a set of reads from a URL -- return the downloaded filepath."""
     logging.info("Getting reads from {}".format(input_str))
-    if not input_str.startswith(('s3://', 'sra://', 'ftp://')):
-        logging.info("Treating as local path")
-        assert os.path.exists(input_str)
-        return input_str
 
     filename = input_str.split('/')[-1]
     local_path = os.path.join(temp_folder, filename)
+
+    if not input_str.startswith(('s3://', 'sra://', 'ftp://')):
+        logging.info("Treating as local path")
+        assert os.path.exists(input_str)
+        logging.info("Making symbolic link in temporary folder")
+        os.symlink(input_str, local_path)
+        return local_path
+
     # Make sure the temp folder ends with '/'
     if not temp_folder.endswith("/"):
         temp_folder = "{}/".format(temp_folder)

@@ -2,6 +2,8 @@
 """Wrapper script to run classify.seqs, including wrappers for S3 access."""
 
 import os
+import uuid
+import shutil
 import logging
 import argparse
 from exec_helpers import run_cmds
@@ -42,6 +44,13 @@ def classify_seqs(input_str,
             logging.info(msg.format(output_fp))
             return
 
+    # Make a temp folder inside the `temp_folder` that can be deleted at end
+    temp_folder = os.path.join(
+        temp_folder,
+        str(uuid.uuid4()).replace("-", "")
+    )
+    os.mkdir(temp_folder)
+
     # Get the reads
     read_fp = get_reads_from_url(input_str, temp_folder)
     # If the reads are gzipped, unzip them
@@ -78,19 +87,15 @@ def classify_seqs(input_str,
     logging.info("Running mothur.classify.seqs")
     run_cmds(["mothur", batchfile_fp])
 
-    # The output file names are created as a combination of the inputs
-    output_per_read = "{}.{}.wang.taxonomy".format(
-        read_fp.replace(".fasta", ""),
-        ref_fasta_fp.split('/')[-1].replace(".fasta", ""))
+    # There is only one file in the output folder with this file ending
+    output_files = os.listdir(temp_folder)
+    output_per_read = [x for x in output_files if x.endswith(".wang.taxonomy")]
+    assert len(output_per_read) == 1, "\n".join(output_files)
+    output_per_read = os.path.join(temp_folder, output_per_read[0])
 
-    output_summary = "{}.{}.wang.tax.summary".format(
-        read_fp.replace(".fasta", ""),
-        ref_fasta_fp.split('/')[-1].replace(".fasta", ""))
+    output_summary = output_per_read.replace(".taxonomy", ".tax.summary")
 
     output = parse_classify_seqs_output(output_per_read, output_summary)
-
-    os.unlink(output_per_read)
-    os.unlink(output_summary)
 
     # Read in the logs
     logging.info("Reading in the logs")
@@ -109,6 +114,10 @@ def classify_seqs(input_str,
     # Write out the final results as JSON and copy to the output folder
     return_results(output, read_prefix, output_folder, temp_folder)
 
+    # Delete everything in the temporary folder
+    logging.info("Deleting temporary folder {}".format(temp_folder))
+    shutil.rmtree(temp_folder)
+
 
 def parse_classify_seqs_output(output_per_read, output_summary):
     """Parse a set of results from the mothur classify.seqs command."""
@@ -118,7 +127,8 @@ def parse_classify_seqs_output(output_per_read, output_summary):
     }
 
     # Read the taxonomic assignments per read
-    assert os.path.exists(output_per_read)
+    msg = "{} does not exist".format(output_per_read)
+    assert os.path.exists(output_per_read), msg
     with open(output_per_read, "rt") as f:
         for line in f:
             # Split up the tab-delimited line
@@ -131,7 +141,8 @@ def parse_classify_seqs_output(output_per_read, output_summary):
             )
 
     # Read the taxonomic assignment summary
-    assert os.path.exists(output_summary)
+    msg = "{} does not exist".format(output_summary)
+    assert os.path.exists(output_summary), msg
     header = None
     with open(output_summary, "rt") as f:
         for line in f:
@@ -184,7 +195,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Set up logging
-    log_fp = 'log.txt'
+    log_fp = '{}.log.txt'.format(uuid.uuid4())
     fmt = '%(asctime)s %(levelname)-8s [mothur.classify.seqs] %(message)s'
     logFormatter = logging.Formatter(fmt)
     rootLogger = logging.getLogger()
