@@ -53,6 +53,18 @@ def classify_seqs(input_str,
 
     # Get the reads
     read_fp = get_reads_from_url(input_str, temp_folder)
+
+    # If the read name has any forbidden characters, make a clean symlink
+    forbidden = [" ", "-"]
+    new_filename = read_fp.split('/')[-1]
+    for c in forbidden:
+        if c in new_filename:
+            new_filename = new_filename.replace(c, "_")
+    if new_filename != read_fp.split('/')[-1]:
+        new_fp = os.path.join(temp_folder, new_filename)
+        os.symlink(read_fp, new_fp)
+        read_fp = new_fp
+
     # If the reads are gzipped, unzip them
     if read_fp.endswith(".gz"):
         run_cmds(["gunzip", "-f", read_fp])

@@ -24,6 +24,12 @@
 }
 
 @test "run_classify_seqs.py" {
+  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input "/usr/local/tests/test - query.fasta"
+  
+  python /usr/local/tests/test_run_classify_seqs.py "/usr/local/tests/test - query.fasta.json.gz"
+}
+
+@test "run_classify_seqs.py - clean filename" {
   run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query.fasta
   
   python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query.fasta.json.gz
