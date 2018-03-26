@@ -29,7 +29,7 @@ def get_reads_from_url(input_str, temp_folder):
     filename = input_str.split('/')[-1]
     local_path = os.path.join(temp_folder, filename)
 
-    if not input_str.startswith(('s3://', 'sra://', 'ftp://')):
+    if not input_str.startswith(('s3://', 'sra://', 'ftp://', 'https://', 'http://')):
         logging.info("Treating as local path")
         assert os.path.exists(input_str)
         logging.info("Making symbolic link in temporary folder")
@@ -58,9 +58,9 @@ def get_reads_from_url(input_str, temp_folder):
             ])
         return local_path
 
-    # Get files from an FTP server
-    elif input_str.startswith('ftp://'):
-        logging.info("Getting reads from FTP")
+    # Get files from an FTP server or HTTP
+    elif input_str.startswith('ftp://', 'https://', 'http://'):
+        logging.info("Getting reads from FTP / HTTP(S)")
         run_cmds(['wget', '-P', temp_folder, input_str])
         return local_path
 
