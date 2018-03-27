@@ -15,6 +15,7 @@ from s3_helpers import get_reads_from_url
 
 
 def classify_seqs(input_str,
+                  sample_name,
                   ref_fasta_fp,
                   ref_fasta_url,
                   ref_taxonomy_fp,
@@ -30,7 +31,7 @@ def classify_seqs(input_str,
     read_prefix = input_str.split('/')[-1]
 
     # Check to see if the output already exists, if so, skip this sample
-    output_fp = output_folder.rstrip('/') + '/' + read_prefix + '.json.gz'
+    output_fp = output_folder.rstrip('/') + '/' + sample_name + '.json.gz'
     if output_fp.startswith('s3://'):
         # Check S3
         if s3_path_exists(output_fp):
@@ -117,6 +118,7 @@ def classify_seqs(input_str,
     output["metadata"] = {
         "input_path": input_str,
         "input": read_prefix,
+        "sample_name": sample_name,
         "output_folder": output_folder,
         "logs": logs,
         "ref_fasta_url": ref_fasta_url,
@@ -124,7 +126,7 @@ def classify_seqs(input_str,
     }
 
     # Write out the final results as JSON and copy to the output folder
-    return_results(output, read_prefix, output_folder, temp_folder)
+    return_results(output, sample_name, output_folder, temp_folder)
 
     # Delete everything in the temporary folder
     logging.info("Deleting temporary folder {}".format(temp_folder))
@@ -180,6 +182,10 @@ if __name__ == "__main__":
                         required=True,
                         help="""Location for input file(s). Comma-separated.
                                 (Supported: sra://, s3://, or ftp://).""")
+    parser.add_argument("--sample-name",
+                        type=str,
+                        required=True,
+                        help="""Sample name.""")
     parser.add_argument("--ref-fasta",
                         type=str,
                         required=True,
@@ -233,6 +239,7 @@ if __name__ == "__main__":
     for input_str in args.input.split(','):
         logging.info("Processing input argument: " + input_str)
         classify_seqs(input_str,              # ID for single sample to process
+                      args.sample_name,       # Name for the output file
                       ref_fasta_fp,           # Local path to DB for FASTA
                       args.ref_fasta,         # URL for reference FASTA
                       ref_taxonomy_fp,        # Local path to DB for taxonomy
