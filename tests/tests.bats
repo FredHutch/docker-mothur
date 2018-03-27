@@ -24,19 +24,19 @@
 }
 
 @test "run_classify_seqs.py" {
-  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input "/usr/local/tests/test - query.fasta"
+  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input "/usr/local/tests/test - query.fasta" --sample-name test_query
   
-  python /usr/local/tests/test_run_classify_seqs.py "/usr/local/tests/test - query.fasta.json.gz"
+  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query.json.gz
 }
 
 @test "run_classify_seqs.py - clean filename" {
-  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query.fasta
+  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query.fasta --sample-name test_query
   
-  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query.fasta.json.gz
+  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query.json.gz
 }
 
 @test "run_classify_seqs.py - fastq_to_fasta" {
-  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query2.fastq
+  run_classify_seqs.py --ref-fasta /usr/local/tests/test_db.fasta --ref-taxonomy /usr/local/tests/test_db.tax --output-folder /usr/local/tests/ --input /usr/local/tests/test_query2.fastq --sample-name test_query2
   
-  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query2.fastq.json.gz
+  python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query2.json.gz
 }
