@@ -224,7 +224,6 @@ if __name__ == "__main__":
 
     # Make sure that the reference files have controlled endings
     assert args.ref_fasta.endswith(".fasta")
-    assert args.ref_taxonomy.endswith(".tax")
 
     # Get the reference database files
     ref_fasta_fp = get_file(args.ref_fasta, args.temp_folder)
