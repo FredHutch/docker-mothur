@@ -59,7 +59,7 @@ def get_reads_from_url(input_str, temp_folder):
         return local_path
 
     # Get files from an FTP server or HTTP
-    elif input_str.startswith('ftp://', 'https://', 'http://'):
+    elif input_str.startswith(('ftp://', 'https://', 'http://')):
         logging.info("Getting reads from FTP / HTTP(S)")
         run_cmds(['wget', '-P', temp_folder, input_str])
         return local_path
