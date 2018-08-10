@@ -204,6 +204,8 @@ make.shared(list=current, count=current, label=1)""".format(
             if output_folder.startswith("s3://"):
                 run_cmds(["aws", "s3", "cp", fp, output_folder])
             else:
+                if not os.path.exists(output_folder):
+                    os.mkdir(output_folder)
                 run_cmds(["cp", fp, output_folder])
         else:            
             logging.info("Skipping: " + f)
