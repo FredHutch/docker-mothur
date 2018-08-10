@@ -1,0 +1,48 @@
+2018-08-09 16:47:39,321 INFO     [get_sra.py] Setting up fastq-dump cache within /share/b2b23b3f
+2018-08-09 16:47:39,323 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:39,323 INFO     [get_sra.py] vdb-config --root -s /repository/user/main/public/root=/share/b2b23b3f/sra_cache
+2018-08-09 16:47:39,327 INFO     [get_sra.py] Exit code was 3, but we will continue anyway
+2018-08-09 16:47:39,328 INFO     [get_sra.py] Downloading SRR5578907 from SRA
+2018-08-09 16:47:39,328 INFO     [get_sra.py] Local path: /share/b2b23b3f/reads.fastq
+2018-08-09 16:47:39,329 INFO     [get_sra.py] Downloading SRR5578907 via fastq-dump
+2018-08-09 16:47:39,329 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:39,331 INFO     [get_sra.py] prefetch SRR5578907
+2018-08-09 16:47:41,505 INFO     [get_sra.py] Standard output of subprocess:
+2018-08-09 16:47:41,505 INFO     [get_sra.py] 
+2018-08-09 16:47:41,506 INFO     [get_sra.py] 2018-08-09T16:47:39 prefetch.2.8.2: 1) Downloading 'SRR5578907'...
+2018-08-09 16:47:41,507 INFO     [get_sra.py] 2018-08-09T16:47:39 prefetch.2.8.2:  Downloading via https...
+2018-08-09 16:47:41,507 INFO     [get_sra.py] 2018-08-09T16:47:41 prefetch.2.8.2: 1) 'SRR5578907' was downloaded successfully
+2018-08-09 16:47:41,508 INFO     [get_sra.py] 2018-08-09T16:47:41 prefetch.2.8.2: 'SRR5578907' has 0 unresolved dependencies
+2018-08-09 16:47:41,509 INFO     [get_sra.py] 
+2018-08-09 16:47:41,510 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:41,510 INFO     [get_sra.py] fastq-dump --split-files --defline-seq @$ac.$si.$sg/$ri --defline-qual + --outdir /share/b2b23b3f SRR5578907
+2018-08-09 16:47:41,822 INFO     [get_sra.py] Standard output of subprocess:
+2018-08-09 16:47:41,823 INFO     [get_sra.py] Read 16422 spots for SRR5578907
+2018-08-09 16:47:41,823 INFO     [get_sra.py] Written 16422 spots for SRR5578907
+2018-08-09 16:47:41,824 INFO     [get_sra.py] 
+2018-08-09 16:47:41,825 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:41,826 INFO     [get_sra.py] fastq_pair /share/b2b23b3f/SRR5578907_1.fastq /share/b2b23b3f/SRR5578907_2.fastq
+2018-08-09 16:47:42,032 INFO     [get_sra.py] Standard output of subprocess:
+2018-08-09 16:47:42,033 INFO     [get_sra.py] Left paired: 16422		Right paired: 16422
+2018-08-09 16:47:42,033 INFO     [get_sra.py] Left single: 0		Right single: 0
+2018-08-09 16:47:42,034 INFO     [get_sra.py] Writing the paired reads to /share/b2b23b3f/SRR5578907_1.fastq.paired.fq and /share/b2b23b3f/SRR5578907_2.fastq.paired.fq.
+2018-08-09 16:47:42,035 INFO     [get_sra.py] Writing the single reads to /share/b2b23b3f/SRR5578907_1.fastq.single.fq and /share/b2b23b3f/SRR5578907_2.fastq.single.fq
+2018-08-09 16:47:42,036 INFO     [get_sra.py] 
+2018-08-09 16:47:42,038 INFO     [get_sra.py] Removing raw downloaded FASTQ files
+2018-08-09 16:47:42,044 INFO     [get_sra.py] Interleaving the paired FASTQ files
+2018-08-09 16:47:42,300 INFO     [get_sra.py] Interleaved 16,422 pairs of reads
+2018-08-09 16:47:42,302 INFO     [get_sra.py] Removing split and filtered FASTQ files
+2018-08-09 16:47:42,308 INFO     [get_sra.py] Removing cached SRA files
+2018-08-09 16:47:42,310 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:42,310 INFO     [get_sra.py] find /share/b2b23b3f -name *.sra -delete
+2018-08-09 16:47:42,322 INFO     [get_sra.py] Adding reads from SRR5578907 to the total
+2018-08-09 16:47:42,553 INFO     [get_sra.py] Removing temporary file /share/b2b23b3f/SRR5578907.all.fastq
+2018-08-09 16:47:42,558 INFO     [get_sra.py] Compress the FASTQ file
+2018-08-09 16:47:42,559 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:42,560 INFO     [get_sra.py] pigz /share/b2b23b3f/reads.fastq
+2018-08-09 16:47:43,048 INFO     [get_sra.py] Done fetching SRR5578907
+2018-08-09 16:47:43,049 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:43,050 INFO     [get_sra.py] mv /share/b2b23b3f/reads.fastq.gz /share/SRR5578907.fastq.gz
+2018-08-09 16:47:43,054 INFO     [get_sra.py] Commands:
+2018-08-09 16:47:43,055 INFO     [get_sra.py] mv /share/b2b23b3f/SRR5578907.log /share/SRR5578907.log
+2018-08-09 16:47:43,059 INFO     [get_sra.py] Removing temporary folder: /share/b2b23b3f

@@ -45,3 +45,15 @@ optional arguments:
   --temp-folder TEMP_FOLDER
                         Folder used for temporary files.
 ```
+
+### Wrapper script for running mothur from paired FASTQ files
+
+Test data (in `/tests/16S_V4_data/`) was downloaded from PRJNA386260, "V4 16S rRNA sequencing of human fecal microbiota Raw sequence reads",
+deposited by the University of Michigan.
+
+Workflow adapted from https://mothur.org/wiki/MiSeq_SOP, accessed August 9th, 2018.
+
+Citation: 
+
+Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD. (2013): Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. Applied and Environmental Microbiology. 79(17):5112-20.
+
