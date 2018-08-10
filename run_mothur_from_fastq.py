@@ -96,7 +96,7 @@ def run_mothur_command(command_string):
 def run_mothur(
     input_folder, 
     output_folder, 
-    output_prefix=datetime.datetime.today().strftime('%Y-%m-%d-%H-%M'),
+    output_prefix=datetime.datetime.today().strftime('%Y_%m_%d_%H_%M'),
     threads=16,
     temp_folder="/scratch"
 ):
