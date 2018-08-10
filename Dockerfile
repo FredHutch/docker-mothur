@@ -30,7 +30,7 @@ ENV PYTHONPATH="/usr/local/bin/batch_helpers"
 ENV PATH="/bin/mothur:${PATH}"
 
 # Add the run scripts and databases to the image in the PATH
-ADD dbs/silva.bacteria/silva.bacteria.fasta /usr/local/dbs/
+ADD dbs/silva.bacteria/silva.bacteria.fasta.gz /usr/local/dbs/
 ADD dbs/silva.bacteria/silva.bacteria.gg.tax /usr/local/dbs/
 ADD run_classify_seqs.py /bin/
 ADD run_mothur_from_fastq.py /bin/
