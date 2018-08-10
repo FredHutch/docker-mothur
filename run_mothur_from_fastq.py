@@ -89,7 +89,8 @@ def run_mothur_command(command_string):
     assert os.path.exists(batch_file) is False
     with open(batch_file, "wt") as fo:
         fo.write(command_string + "\n")
-    run_cmds(["mothur", batch_file])
+    # Note: this will not catch errors -- need to check manually
+    run_cmds(["mothur", batch_file], catchExcept=True)
     os.remove(batch_file)
     
 
@@ -162,6 +163,7 @@ def run_mothur(
     assert os.path.exists(manifest_fp)
 
     # Run the whole mothur workflow
+    # Note: this will not catch errors -- need to check manually by the existance of output files
     run_mothur_command(
         """# mothur workflow
 make.contigs(file={}, processors={})
@@ -180,6 +182,8 @@ make.shared(list=current, count=current, label=1)""".format(
         )
     )
 
+    for ending in ["precluster.count_table", "precluster.gg.wang.tx.list", "unique.precluster.dist"]:
+        assert any([f.endswith(ending) for f in os.listdir(temp_folder)]), "No outputs ending with " + ending
 
     # Rename the mothur logfile
     for f in os.listdir(temp_folder):
