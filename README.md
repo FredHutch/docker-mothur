@@ -57,3 +57,20 @@ Citation:
 
 Kozich JJ, Westcott SL, Baxter NT, Highlander SK, Schloss PD. (2013): Development of a dual-index sequencing strategy and curation pipeline for analyzing amplicon sequence data on the MiSeq Illumina sequencing platform. Applied and Environmental Microbiology. 79(17):5112-20.
 
+usage: run_mothur_from_fastq.py [-h] --input-folder INPUT_FOLDER
+                                --output-folder OUTPUT_FOLDER
+                                [--threads THREADS]
+                                [--temp-folder TEMP_FOLDER]
+
+Run mothur on a set of FASTQ files.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --input-folder INPUT_FOLDER
+                        Folder containing input files.
+  --output-folder OUTPUT_FOLDER
+                        Folder to place results. (Supported: s3://, or local
+                        path).
+  --threads THREADS     Number of threads to use.
+  --temp-folder TEMP_FOLDER
+                        Folder used for temporary files.
