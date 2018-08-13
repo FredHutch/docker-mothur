@@ -74,3 +74,4 @@ optional arguments:
   --threads THREADS     Number of threads to use.
   --temp-folder TEMP_FOLDER
                         Folder used for temporary files.
+
