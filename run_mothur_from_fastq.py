@@ -126,8 +126,14 @@ def run_mothur(
     )
     os.mkdir(temp_folder)
 
-    # Decompress the database
-    run_cmds(["gunzip", "/usr/local/dbs/silva.bacteria.fasta.gz"])
+    # Copy the database to the temp folder and decompress it
+    temp_db_fasta = os.path.join(temp_folder, "silva.bacteria.fasta.gz")
+    run_cmds(["cp", "/usr/local/dbs/silva.bacteria.fasta.gz", temp_db_fasta])
+    run_cmds(["gunzip", temp_db_fasta])
+    temp_db_fasta = temp_db_fasta[:-3]  # Remove the .gz
+    # Also copy the tax file
+    temp_db_tax = os.path.join(temp_folder, "silva.bacteria.gg.tax")
+    run_cmds(["cp", "/usr/local/dbs/silva.bacteria.gg.tax", temp_db_tax])
 
     # Make sure that the input folder ends with a trailing slash
     assert isinstance(input_folder, str), "Input folder must be a string"
@@ -166,19 +172,22 @@ def run_mothur(
     # Note: this will not catch errors -- need to check manually by the existance of output files
     run_mothur_command(
         """# mothur workflow
-make.contigs(file={}, processors={})
+make.contigs(file={manifest_fp}, processors={threads})
 screen.seqs(fasta=current, group=current, maxambig=0, maxlength=275)
 unique.seqs()
 count.seqs(name=current, group=current)
 align.seqs(fasta=current, reference=XXX)
 unique.seqs(fasta=current, count=current)
 pre.cluster(fasta=current, count=current, diffs=2)
-classify.seqs(fasta=current, count=current, reference=/usr/local/dbs/silva.bacteria.fasta, taxonomy=/usr/local/dbs/silva.bacteria.gg.tax, cutoff=80)
+classify.seqs(fasta=current, count=current, reference={temp_db_fasta}, taxonomy={temp_db_tax}, cutoff=80)
 cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel=4, cutoff=0.15)
 classify.otu(list=current, count=current, taxonomy=current, label=0.03)
 phylotype(taxonomy=current)
 make.shared(list=current, count=current, label=1)""".format(
-            manifest_fp, threads
+            temp_db_fasta=temp_db_fasta,
+            temp_db_tax=temp_db_tax,
+            manifest_fp=manifest_fp,
+            threads=threads
         )
     )
 
