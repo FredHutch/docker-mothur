@@ -210,6 +210,15 @@ make.shared(list=current, count=current, label=1)""".format(
         if f.startswith(output_prefix):
             logging.info("Uploading: " + f)
             fp = os.path.join(temp_folder, f)
+
+            # Skip temp files
+            if fp.endswith("temp"):
+                continue
+
+            # Skip empty files
+            if os.stat(fp).st_size == 0:
+                continue
+
             if output_folder.startswith("s3://"):
                 run_cmds(["aws", "s3", "cp", fp, output_folder])
             else:
