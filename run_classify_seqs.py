@@ -45,13 +45,6 @@ def classify_seqs(input_str,
             logging.info(msg.format(output_fp))
             return
 
-    # Make a temp folder inside the `temp_folder` that can be deleted at end
-    temp_folder = os.path.join(
-        temp_folder,
-        str(uuid.uuid4()).replace("-", "")
-    )
-    os.mkdir(temp_folder)
-
     # Get the reads
     read_fp = get_reads_from_url(input_str, temp_folder)
 
@@ -127,10 +120,6 @@ def classify_seqs(input_str,
 
     # Write out the final results as JSON and copy to the output folder
     return_results(output, sample_name, output_folder, temp_folder)
-
-    # Delete everything in the temporary folder
-    logging.info("Deleting temporary folder {}".format(temp_folder))
-    shutil.rmtree(temp_folder)
 
 
 def parse_classify_seqs_output(output_per_read, output_summary):
@@ -212,8 +201,13 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Make a temporary folder to place data into
+    temp_folder = os.path.join(args.temp_folder, str(uuid.uuid4())[:8])
+    assert os.path.exists(temp_folder) is False
+    os.mkdir(temp_folder)
+
     # Set up logging
-    log_fp = '{}.log.txt'.format(uuid.uuid4())
+    log_fp = os.path.join(temp_folder, 'log.txt')
     fmt = '%(asctime)s %(levelname)-8s [mothur.classify.seqs] %(message)s'
     logFormatter = logging.Formatter(fmt)
     rootLogger = logging.getLogger()
@@ -232,8 +226,8 @@ if __name__ == "__main__":
     assert args.ref_fasta.endswith((".fasta", ".fasta.gz"))
 
     # Get the reference database files
-    ref_fasta_fp = get_file(args.ref_fasta, args.temp_folder)
-    ref_taxonomy_fp = get_file(args.ref_taxonomy, args.temp_folder)
+    ref_fasta_fp = get_file(args.ref_fasta, temp_folder)
+    ref_taxonomy_fp = get_file(args.ref_taxonomy, temp_folder)
 
     # Decompress the reference FASTA if necessary
     if ref_fasta_fp.endswith(".gz"):
@@ -241,17 +235,26 @@ if __name__ == "__main__":
         ref_fasta_fp = ref_fasta_fp[:-3]
 
     # Align each of the inputs and calculate the overall abundance
-    for input_str in args.input.split(','):
-        logging.info("Processing input argument: " + input_str)
-        classify_seqs(input_str,              # ID for single sample to process
-                      args.sample_name,       # Name for the output file
-                      ref_fasta_fp,           # Local path to DB for FASTA
-                      args.ref_fasta,         # URL for reference FASTA
-                      ref_taxonomy_fp,        # Local path to DB for taxonomy
-                      args.ref_taxonomy,      # URL for reference taxonomy
-                      args.output_folder,     # Place to put results
-                      threads=args.threads,
-                      temp_folder=args.temp_folder)
+    logging.info("Processing input: " + args.input)
+    try:
+        classify_seqs(
+            args.input,             # ID for single sample to process
+            args.sample_name,       # Name for the output file
+            ref_fasta_fp,           # Local path to DB for FASTA
+            args.ref_fasta,         # URL for reference FASTA
+            ref_taxonomy_fp,        # Local path to DB for taxonomy
+            args.ref_taxonomy,      # URL for reference taxonomy
+            args.output_folder,     # Place to put results
+            threads=args.threads,
+            temp_folder=temp_folder
+        )
+    except:
+        # Make sure to delete the temporary folder if there's a failure
+        shutil.rmtree(temp_folder)
+
+    # Delete everything in the temporary folder
+    logging.info("Deleting temporary folder {}".format(temp_folder))
+    shutil.rmtree(temp_folder)
 
     # Stop logging
     logging.info("Done")

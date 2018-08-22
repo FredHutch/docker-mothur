@@ -40,8 +40,3 @@
   
   python /usr/local/tests/test_run_classify_seqs.py /usr/local/tests/test_query2.json.gz
 }
-
-@test "run_mothur.py - end-to-end" {
-  run_mothur_from_fastq.py --input-folder /usr/local/tests/16S_V4_data/ --output-folder /usr/local/tests/16S_V4_output/
-}
-
