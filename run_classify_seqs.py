@@ -229,11 +229,16 @@ if __name__ == "__main__":
     rootLogger.addHandler(consoleHandler)
 
     # Make sure that the reference files have controlled endings
-    assert args.ref_fasta.endswith(".fasta")
+    assert args.ref_fasta.endswith((".fasta", ".fasta.gz"))
 
     # Get the reference database files
     ref_fasta_fp = get_file(args.ref_fasta, args.temp_folder)
     ref_taxonomy_fp = get_file(args.ref_taxonomy, args.temp_folder)
+
+    # Decompress the reference FASTA if necessary
+    if ref_fasta_fp.endswith(".gz"):
+        run_cmds(["gunzip", "-k", "-f", ref_fasta_fp])
+        ref_fasta_fp = ref_fasta_fp[:-3]
 
     # Align each of the inputs and calculate the overall abundance
     for input_str in args.input.split(','):
